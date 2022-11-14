@@ -4,7 +4,7 @@
 
 # SQL
 
-SQL - Structured Query Language, ou Linguagem de Consulta Estruturada.
+SQL - Structured Query Language, ou Linguagem de Consulta Estruturada. <br>
 É a linguagem padrão para banco de dados relacionais.
 
 Comandos DDL (Data Definition Language):
