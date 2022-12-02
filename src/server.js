@@ -1,11 +1,10 @@
 require("express-async-errors"); // esta importação precisa ser feita no início de tudo
 
 const migrationsRun = require("./database/sqlite/migrations");
-
 const AppError = require("./utils/AppError");
+const uploadConfig = require("./configs/upload");
 
 const express = require("express"); // importando o express
-
 const routes = require("./routes");
 // não é necessário colocar "./routes/index.js" pois, por padrão, quando não é informado o nome do arquivo que deseja acessar da pasta, carrega o arquivo index
 
@@ -14,6 +13,8 @@ migrationsRun(); // executando o banco de dados
 const app = express(); // inicializando o express
 app.use(express.json());
 // informando ao node que o conteúdo vindo pelo corpo da requisição é no formato JSON
+
+app.use("/files", express.static(uploadConfig.UPLOADS_FOLDER)); // static para servir arquivos estáticos
 
 app.use(routes);
 
