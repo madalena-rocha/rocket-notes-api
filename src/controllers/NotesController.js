@@ -88,6 +88,7 @@ class NotesController {
                 .innerJoin("notes", "notes.id", "tags.note_id")
                 // conectar uma tabela com a outra
                 // tabela que deseja conectar, campos usados para conectar as tabelas, campo em comum entre as tabelas
+                .groupBy("notes.id") // para não trazer notas repetidas
                 .orderBy("notes.title")
         } else {
             notes = await knex("notes")

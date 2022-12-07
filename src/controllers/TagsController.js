@@ -7,6 +7,7 @@ class TagsController { // listar todas as tags cadastradas do usuário
         const tags = await knex("tags")
             .where({ user_id })
             // como o nome é exatamente o mesmo no banco de dados, não é necessário colocar user_id: user_id
+            .groupBy("name") // agrupar pelo campo e não trazer repetidos desse campo
 
         return response.json(tags);
     }

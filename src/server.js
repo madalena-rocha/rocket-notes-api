@@ -4,6 +4,8 @@ const migrationsRun = require("./database/sqlite/migrations");
 const AppError = require("./utils/AppError");
 const uploadConfig = require("./configs/upload");
 
+const cors = require("cors"); // para conectar o front com o back-end
+// cors: Cross-origin resource sharing ou compartilhamento de recursos com origens diferentes
 const express = require("express"); // importando o express
 const routes = require("./routes");
 // não é necessário colocar "./routes/index.js" pois, por padrão, quando não é informado o nome do arquivo que deseja acessar da pasta, carrega o arquivo index
@@ -11,6 +13,7 @@ const routes = require("./routes");
 migrationsRun(); // executando o banco de dados
 
 const app = express(); // inicializando o express
+app.use(cors()); // habilitar para que o back-end consiga atender as requisições do front-end
 app.use(express.json());
 // informando ao node que o conteúdo vindo pelo corpo da requisição é no formato JSON
 
