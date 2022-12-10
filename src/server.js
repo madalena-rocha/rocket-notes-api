@@ -39,6 +39,10 @@ app.use(( error, request, response, next ) => {
     });
 });
 
+app.get("/", (req, res) => {
+    return res.json({"message": "OK"});
+})
+
 const PORT = process.env.PORT || 3333; // informando a porta que o express deve atender as solicitações
 app.listen(PORT, () => console.log(`Server is running on Port ${PORT}`)); // passando a função que será executada quando a aplicação iniciar
 
