@@ -1,8 +1,9 @@
 const { hash, compare } = require("bcryptjs"); // hash é a função que vai gerar a criptografia da senha
-
 const AppError = require("../utils/AppError");
 
+const UserRepository = require("../repositories/UserRepository");
 const sqliteConnection = require("../database/sqlite"); // importando a conexão com o banco de dados
+const UserCreateService = require("../services/UserCreateService");
 
 /*
     Controllers
@@ -16,24 +17,10 @@ class UsersController {
     async create(request, response) {
         const { name, email, password } = request.body;
 
-        const database = await sqliteConnection(); // aguardar a conexão com o banco de dados
-        const checkUserExists = await database.get("SELECT * FROM users WHERE email = (?)", [email]);
-        // verificar se o e-mail do usuário já existe no banco de dados
-        // get para buscar por informações
-        // aplicar filtro para pesquisar por usuários onde o e-mail seja igual ao informado
-        // para inserir o conteúdo da variável: email = (?)", [email] vai substituir ? pelo e-mail que está dentro da variável e-mail
+        const userRepository = new UserRepository(); // instanciando o userRepository porque ele é uma classe
+        const userCreateService = new UserCreateService(userRepository);
         
-        if (checkUserExists) {
-            throw new AppError("Este e-mail já está em uso.");
-        }
-
-        const hashedPassword = await hash(password, 8); // o segundo parâmetro é o salt, que é o fator de complexidade do hash
-        // a hash é uma promise, por isso, é necessário utilizar o await para esperar terminar de gerar a criptografia
-
-        await database.run(
-            "INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
-            [name, email, hashedPassword]
-        ); // inserir na tabela de usuários nas coluna name, email e password os valores recebidos do usuário
+        await userCreateService.execute({ name, email, password });
 
         return response.status(201).json();
     }
